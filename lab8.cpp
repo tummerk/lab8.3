@@ -2,14 +2,15 @@
 #include <fstream>
 #include <string>
 using namespace std;
-const int N_Max = 2000;
+const int N_Max = 5000;
 string vowels = "aeoyui";
 
-void read(string words[N_Max],int& i) {
+void read(string words[N_Max],int& cnt) {
+	cnt = 0;
 	std::ifstream in("input.txt");
 	while (!in.eof()) {
-		in >> words[i];
-		i++;
+		in >> words[cnt];
+		cnt++;
 	}
 }
 
@@ -63,21 +64,25 @@ string up(string word){
 	}return s;
 }
 
-int lastLet(string word) {
-	for (int i = 0; i < word.length()-1; i++){
-		if (!isalpha(word[i]) && word[i]!='-')
-			return i - 1;
-	}return word.length();
+string newWord(string word) {
+	return up(word) + bracket(recurVowels(word));
 }
 
-
-void processing(string word[N_Max]) {
-
+void write(string word[N_Max],int cnt) {
+	ofstream out("output.txt");
+	for (int i = 0; i < cnt; i++) {
+		if (recurVowels(word[i]) == "")
+			out << word[i];
+		else
+			out << newWord(word[i]);
+	}
 }
 
 void main() {
 	std::string words[N_Max];
-	int i = 0;
-	string word = "auoi";
-	cout << bracket(word);
+	int cnt;
+	string word = "aaudgdfooi...";
+	cout << newWord(word);
+	read(words, cnt);
+	write(words, cnt);
 }
